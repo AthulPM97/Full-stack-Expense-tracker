@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container mt-2" style="border: 1px solid black">
+        <h2 style="text-align: center;">Sign Up</h2>
+      <form id="sign-up-form" class="form-group">
+        <input
+          type="text"
+          placeholder="Enter your name"
+          id="input-name"
+          class="form-control mb-2"
+        />
+        <input
+          type="email"
+          placeholder="Enter your email"
+          id="input-email"
+          class="form-control mb-2"
+        />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          id="input-password"
+          class="form-control mb-2"
+        />
+        <div style="text-align: center;">
+          <button type="submit" class="btn-primary">Sign Up</button>
+        </div>
+      </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
