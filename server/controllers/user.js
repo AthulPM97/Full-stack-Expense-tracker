@@ -1,5 +1,7 @@
 const User = require("../models/user");
 
+const bcrypt = require("bcrypt");
+
 exports.postUserSignup = async (req, res, next) => {
   const userDetails = req.body;
   const userEmail = userDetails.email;
@@ -15,10 +17,11 @@ exports.postUserSignup = async (req, res, next) => {
         message: "Email already exists",
       });
     } else {
-      await User.create({ ...userDetails });
-
-      return res.status(200).json({
-        message: "User created successfully",
+      bcrypt.hash(userDetails.password, 10, async (err, hash) => {
+        await User.create({ ...userDetails, password: hash });
+        return res.status(201).json({
+          message: "User created successfully",
+        });
       });
     }
   } catch (err) {
@@ -36,13 +39,16 @@ exports.postUserLogin = async (req, res, next) => {
       where: { email: email },
     });
     if (user) {
-      if (user.password === password) {
-        return res.status(200).json({ message: "Successfully logged in" });
-      } else {
-        return res.status(500).json({ message: "Wrong password" });
-      }
-    } else {
-      return res.status(404).json({ message: "User does not exist!" });
+      bcrypt.compare(password, user.password, (error, result) => {
+        if (error) {
+          return res.status(500).json({ message: "Something went wrong" });
+        }
+        if (result) {
+          return res.status(200).json({ message: "Successfully logged in" });
+        } else {
+          return res.status(404).json({ message: "User does not exist!" });
+        }
+      });
     }
   } catch (err) {
     console.log("postUserLogin ", err);
