@@ -14,7 +14,11 @@ form.addEventListener("submit", (e) => {
   };
   axios
     .post("http://localhost:3000/user/sign-up", inputData)
-    .then((res) => console.log(res.data))
+    .then((res) => {
+      if(res.status === 201) {
+        location.replace('/client/pages/expenses/addExpense.html')
+      }
+    })
     .catch((err) => showError(err.response.data.message));
 });
 

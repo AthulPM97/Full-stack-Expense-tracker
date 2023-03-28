@@ -13,7 +13,11 @@ form.addEventListener("submit", (e) => {
   };
   axios
     .post("http://localhost:3000/user/login", inputData)
-    .then((res) => console.log(res.data))
+    .then((res) => {
+      if(res.status === 200) {
+        location.replace('/client/pages/expenses/addExpense.html')
+      }
+    })
     .catch((err) => showError(err.response.data.message));
 });
 
