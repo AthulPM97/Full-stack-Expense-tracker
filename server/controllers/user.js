@@ -27,3 +27,24 @@ exports.postUserSignup = async (req, res, next) => {
     });
   }
 };
+
+exports.postUserLogin = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      where: { email: email },
+    });
+    if (user) {
+      if (user.password === password) {
+        return res.status(200).json({ message: "Successfully logged in" });
+      } else {
+        return res.status(500).json({ message: "Wrong password" });
+      }
+    } else {
+      return res.status(500).json({ message: "User does not exist!" });
+    }
+  } catch (err) {
+    console.log("postUserLogin ", err);
+  }
+};
