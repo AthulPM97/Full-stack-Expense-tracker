@@ -42,7 +42,7 @@ exports.postUserLogin = async (req, res, next) => {
         return res.status(500).json({ message: "Wrong password" });
       }
     } else {
-      return res.status(500).json({ message: "User does not exist!" });
+      return res.status(404).json({ message: "User does not exist!" });
     }
   } catch (err) {
     console.log("postUserLogin ", err);
