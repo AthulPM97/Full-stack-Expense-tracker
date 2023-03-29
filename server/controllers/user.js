@@ -1,6 +1,11 @@
 const User = require("../models/user");
 
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+
+function generateAccessToken(id) {
+  return jwt.sign({id: id}, process.env.SECRET_KEY);
+}
 
 exports.postUserSignup = async (req, res, next) => {
   const userDetails = req.body;
@@ -41,10 +46,10 @@ exports.postUserLogin = async (req, res, next) => {
     if (user) {
       bcrypt.compare(password, user.password, (error, result) => {
         if (error) {
-          return res.status(500).json({ message: "Something went wrong" });
+          return res.status(500).json({ message: "Password does not match!" });
         }
         if (result) {
-          return res.status(200).json({ message: "Successfully logged in" });
+          return res.status(200).json({ message: "Successfully logged in", token: generateAccessToken(user.id) });
         } else {
           return res.status(404).json({ message: "User does not exist!" });
         }

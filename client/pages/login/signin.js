@@ -15,6 +15,7 @@ form.addEventListener("submit", (e) => {
     .post("http://localhost:3000/user/login", inputData)
     .then((res) => {
       if(res.status === 200) {
+        localStorage.setItem('token', res.data.token);
         location.replace('/client/pages/expenses/addExpense.html')
       }
     })

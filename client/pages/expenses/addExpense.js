@@ -3,9 +3,10 @@ const inputAmount = document.getElementById("input-amount");
 const inputDescription = document.getElementById("input-description");
 const inputCategory = document.getElementById("input-category");
 
+const token = localStorage.getItem('token');
 document.addEventListener("DOMContentLoaded", () => {
   axios
-    .get("http://localhost:3000/expense")
+    .get("http://localhost:3000/expense", {headers: {"Authorization": token}})
     .then((result) => {
       const data = result.data;
       data.forEach((item, i) => addToList(item, i));
@@ -22,17 +23,17 @@ expenseForm.addEventListener("submit", (e) => {
   };
 
   axios
-    .post("http://localhost:3000/expense/add-expense", expenseData)
+    .post("http://localhost:3000/expense/add-expense",expenseData, {headers:  {"Authorization": token}})
     .then((response) => addToList(response.data))
     .catch((err) => console.log(err));
 });
 
-function addToList(item, i) {
+function addToList(item) {
   const tableBody = document.getElementById("table-body");
   const tr = document.createElement("tr");
 
   const th = document.createElement("th");
-  th.innerText = i + 1;
+  th.innerText = item.id;
   const amount = document.createElement("td");
   amount.innerText = `Rs. ${item.amount}`;
   const description = document.createElement("td");
@@ -55,7 +56,7 @@ function addToList(item, i) {
 function deleteExpense(id) {
   console.log(id);
   axios
-    .delete(`http://localhost:3000/expense/delete-expense/${id}`)
+    .delete(`http://localhost:3000/expense/delete-expense/${id}`,{headers:  {"Authorization": token}})
     .then((response) => {
       if (response.status === 200) {
         console.log("deleted");
