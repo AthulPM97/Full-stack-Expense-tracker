@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .get("http://localhost:3000/expense")
     .then((result) => {
       const data = result.data;
-      data.forEach((item) => addToList(item));
+      data.forEach((item, i) => addToList(item, i));
     })
     .catch((err) => console.log(err));
 });
@@ -27,35 +27,40 @@ expenseForm.addEventListener("submit", (e) => {
     .catch((err) => console.log(err));
 });
 
-function addToList(item) {
-  const list = document.getElementById("expenses-list");
-  const li = document.createElement("li");
+function addToList(item, i) {
+  const tableBody = document.getElementById("table-body");
+  const tr = document.createElement("tr");
 
-  const amount = document.createElement("p");
-  amount.innerText = item.amount;
-  const description = document.createElement("p");
+  const th = document.createElement("th");
+  th.innerText = i + 1;
+  const amount = document.createElement("td");
+  amount.innerText = `Rs. ${item.amount}`;
+  const description = document.createElement("td");
   description.innerText = item.description;
-  const category = document.createElement("p");
+  const category = document.createElement("td");
   category.innerText = item.category;
 
+  const buttonTd = document.createElement("td");
   const btn = document.createElement("button");
   btn.innerText = "Delete";
   btn.classList.add("btn-danger");
   btn.addEventListener("click", deleteExpense.bind(null, item.id));
+  buttonTd.appendChild(btn);
 
-  li.append(amount, description, category, btn);
+  tr.append(th, amount, description, category, buttonTd);
 
-  list.append(li);
+  tableBody.append(tr);
 }
 
 function deleteExpense(id) {
-    console.log(id);
+  console.log(id);
   axios
     .delete(`http://localhost:3000/expense/delete-expense/${id}`)
     .then((response) => {
-        if(response.status === 200) {
-            console.log('deleted');
-        }
+      if (response.status === 200) {
+        console.log("deleted");
+        location.reload();
+      }
     })
     .catch((err) => console.log(err));
 }
