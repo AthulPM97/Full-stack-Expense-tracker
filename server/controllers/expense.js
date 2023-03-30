@@ -2,9 +2,9 @@ const Expense = require("../models/expense");
 const User = require("../models/user");
 
 exports.getExpenses = async (req, res, next) => {
-  
+  const userId = req.user.dataValues.id;
   try {
-    const result = await Expense.findAll();
+    const result = await Expense.findAll({where: {userId: userId}});
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
