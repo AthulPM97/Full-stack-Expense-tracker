@@ -8,6 +8,7 @@ const cors = require("cors");
 const userRoutes = require("./server/routes/user");
 const expenseRoutes = require('./server/routes/expense');
 const purchaseRoutes = require('./server/routes/purchase');
+const premiumRoutes = require('./server/routes/premium');
 
 const sequelize = require("./server/util/database");
 const User = require("./server/models/user");
@@ -28,6 +29,8 @@ app.use("/user", userRoutes);
 app.use('/expense', authenticateUser, expenseRoutes);
 
 app.use('/purchase', authenticateUser, purchaseRoutes);
+
+app.use('/premium', premiumRoutes);
 
 //user-expense association
 User.hasMany(Expense);

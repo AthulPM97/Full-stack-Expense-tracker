@@ -11,11 +11,6 @@ exports.getExpenses = async (req, res, next) => {
   }
 };
 
-exports.getCheckPremium = async (req, res, next) => {
-  const isPremium = req.user.dataValues.isPremium;
-  return res.status(200).json({isPremium: isPremium});
-}
-
 exports.postAddExpense = async (req, res, next) => {
   const expenseData = req.body;
   try {

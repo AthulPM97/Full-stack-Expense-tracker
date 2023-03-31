@@ -26,23 +26,15 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand" href="#">Expense tracker</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <button type="button" class="btn btn-link" id="leaderboard-btn">Leaderboard</button>
       </div>
       <button class="btn-outline-primary" id="premium-btn" >Buy Premium</button>
+      <span class="badge bg-success" id="premium-badge" style='display: none;'>Premium user</span>
+      
     </nav>
-    <h3 style="text-align: center">Your expenses</h3>
+    <h3 style="text-align: center; margin-top: 10px;">Your expenses</h3>
     <div class="container">
       <form id="expense-form">
         <div class="form-group">
@@ -73,7 +65,7 @@
         </div>
       </form>
     </div>
-    <div class="container mt-3" id="expenses-container">
+    <div class="container" id="expenses-container">
       <ul id="expenses-list"></ul>
     </div>
     <div class="container">
@@ -89,6 +81,17 @@
         </thead>
         <tbody id="table-body"></tbody>
       </table>
+    </div>
+    <div class="container" id="leaderboard-container">
+      <h3>Leaderboard</h3>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Total amount</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-table-body"></tbody>
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="addExpense.js"></script>

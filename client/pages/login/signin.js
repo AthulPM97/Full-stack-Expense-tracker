@@ -16,6 +16,7 @@ form.addEventListener("submit", (e) => {
     .then((res) => {
       if(res.status === 200) {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('isPremium', res.data.isPremium);
         location.replace('/client/pages/expenses/addExpense.html')
       }
     })

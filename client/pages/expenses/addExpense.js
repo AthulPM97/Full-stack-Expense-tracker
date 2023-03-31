@@ -1,24 +1,20 @@
 const expenseForm = document.getElementById("expense-form");
 const premiumBtn = document.getElementById("premium-btn");
+const premiumBadge = document.getElementById("premium-badge");
 const inputAmount = document.getElementById("input-amount");
 const inputDescription = document.getElementById("input-description");
 const inputCategory = document.getElementById("input-category");
+const leaderboardBtn = document.getElementById("leaderboard-btn");
 
 const token = localStorage.getItem("token");
+const isPremium = localStorage.getItem("isPremium");
+if (isPremium) {
+  premiumBtn.style.display = "none";
+  premiumBadge.style.display = "";
+}
 
 //events
 document.addEventListener("DOMContentLoaded", () => {
-  axios
-    .get("http://localhost:3000/expense/check-premium", {
-      headers: { Authorization: token },
-    })
-    .then((response) => {
-      const isPremium = response.data.isPremium;
-      if (isPremium) {
-        premiumBtn.style.display = "none";
-      }
-    })
-    .catch((err) => console.log(err));
   axios
     .get("http://localhost:3000/expense", { headers: { Authorization: token } })
     .then((result) => {
@@ -81,6 +77,20 @@ premiumBtn.addEventListener("click", async (e) => {
   }
 });
 
+leaderboardBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  axios
+    .get("http://localhost:3000/premium/leaderboard")
+    .then((response) => {
+      const leaders = response.data;
+      leaders.forEach(item => {
+        addToLeaderTable(item);
+      })
+
+    })
+    .catch((err) => console.log(err));
+});
+
 // functions
 function addToList(item) {
   const tableBody = document.getElementById("table-body");
@@ -120,4 +130,19 @@ function deleteExpense(id) {
       }
     })
     .catch((err) => console.log(err));
+}
+
+
+function addToLeaderTable(item) {
+  const tableBody = document.getElementById("leaderboard-table-body");
+  const tr = document.createElement("tr");
+
+  const name = document.createElement("td");
+  name.innerText = item.name;
+  const totalAmount = document.createElement("td");
+  totalAmount.innerText = item.totalAmount;
+
+  tr.append(name,totalAmount);
+
+  tableBody.appendChild(tr);
 }

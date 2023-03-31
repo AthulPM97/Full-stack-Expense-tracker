@@ -51,7 +51,7 @@ exports.postUserLogin = async (req, res, next) => {
           return res.status(500).json({ message: "Password does not match!" });
         }
         if (result) {
-          return res.status(200).json({ message: "Successfully logged in", token: generateAccessToken(user.id) });
+          return res.status(200).json({ message: "Successfully logged in", token: generateAccessToken(user.id), isPremium: user.isPremium });
         } else {
           return res.status(404).json({ message: "User does not exist!" });
         }
