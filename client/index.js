@@ -15,19 +15,20 @@ form.addEventListener("submit", (e) => {
   axios
     .post("http://localhost:3000/user/sign-up", inputData)
     .then((res) => {
-      if(res.status === 201) {
-        location.replace('/client/pages/expenses/addExpense.html')
+      localStorage.setItem("token", res.data.token);
+      if (res.status === 201) {
+        location.replace("/client/pages/expenses/addExpense.html");
       }
     })
     .catch((err) => showError(err.response.data.message));
 });
 
-function showError (err) {
-  const errorDiv = document.getElementById('error-display');
+function showError(err) {
+  const errorDiv = document.getElementById("error-display");
 
-  const errorText = document.createElement('p');
-  errorText.classList.add('error');
+  const errorText = document.createElement("p");
+  errorText.classList.add("error");
   errorText.innerText = err;
 
   errorDiv.appendChild(errorText);
-};
+}

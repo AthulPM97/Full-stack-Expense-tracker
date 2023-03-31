@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/buy-premium',purchaseController.buyPremium);
 
-router.get('/update-transaction-status',);
+router.post('/update-transaction-status', purchaseController.updateTransactionStatus);
 
 module.exports = router;

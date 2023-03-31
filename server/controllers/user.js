@@ -23,9 +23,11 @@ exports.postUserSignup = async (req, res, next) => {
       });
     } else {
       bcrypt.hash(userDetails.password, 10, async (err, hash) => {
-        await User.create({ ...userDetails, password: hash });
+        const user = await User.create({ ...userDetails, password: hash, isPremium: false });
+        const id = user.dataValues.id
         return res.status(201).json({
           message: "User created successfully",
+          token: generateAccessToken(user.id),
         });
       });
     }
