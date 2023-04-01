@@ -28,7 +28,6 @@ exports.postUserSignup = async (req, res, next) => {
           password: hash,
           isPremium: false,
         });
-        const id = user.dataValues.id;
         return res.status(201).json({
           message: "User created successfully",
           token: generateAccessToken(user.id),

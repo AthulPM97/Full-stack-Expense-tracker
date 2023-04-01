@@ -17,6 +17,7 @@ const Expense = require("./server/models/expense");
 
 const authenticateUser = require("./server/middlewares/authenticate");
 const Order = require("./server/models/order");
+const ForgotPassword = require("./server/models/forgotPassword");
 
 const app = express();
 
@@ -42,6 +43,10 @@ Expense.belongsTo(User);
 //user-order association
 User.hasMany(Order);
 Order.belongsTo(User);
+
+//user-forgotpassword association
+User.hasMany(ForgotPassword);
+ForgotPassword.belongsTo(User);
 
 sequelize
   // .sync({force: true})
