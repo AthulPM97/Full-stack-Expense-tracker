@@ -83,6 +83,7 @@ leaderboardBtn.addEventListener("click", (e) => {
     .get("http://localhost:3000/premium/leaderboard")
     .then((response) => {
       const leaders = response.data;
+      console.log(leaders);
       leaders.forEach(item => {
         addToLeaderTable(item);
       })
@@ -140,7 +141,7 @@ function addToLeaderTable(item) {
   const name = document.createElement("td");
   name.innerText = item.name;
   const totalAmount = document.createElement("td");
-  totalAmount.innerText = item.totalAmount;
+  totalAmount.innerText = item.totalExpense;
 
   tr.append(name,totalAmount);
 

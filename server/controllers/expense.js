@@ -18,6 +18,8 @@ exports.postAddExpense = async (req, res, next) => {
       ...expenseData,
       userId: req.user.id,
     });
+    req.user.totalExpense = req.user.totalExpense + +expenseData.amount;
+    await req.user.save();
     return res.status(201).json(result.dataValues);
   } catch (err) {
     console.log(err);
@@ -30,7 +32,10 @@ exports.deleteExpense = async (req, res, next) => {
     const item = await Expense.findOne({
       where: { id: id, userId: req.user.id },
     });
+    const amount = item.dataValues.amount;
     await item.destroy();
+    req.user.totalExpense = req.user.totalExpense - +amount;
+    await req.user.save();
     return res.status(200).json("Deleted successfully");
   } catch (err) {
     console.log(err);

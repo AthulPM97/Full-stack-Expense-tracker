@@ -1,10 +1,10 @@
 const User = require("../models/user");
 
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 function generateAccessToken(id) {
-  return jwt.sign({id: id}, process.env.SECRET_KEY);
+  return jwt.sign({ id: id }, process.env.SECRET_KEY);
 }
 
 exports.postUserSignup = async (req, res, next) => {
@@ -23,8 +23,12 @@ exports.postUserSignup = async (req, res, next) => {
       });
     } else {
       bcrypt.hash(userDetails.password, 10, async (err, hash) => {
-        const user = await User.create({ ...userDetails, password: hash, isPremium: false });
-        const id = user.dataValues.id
+        const user = await User.create({
+          ...userDetails,
+          password: hash,
+          isPremium: false,
+        });
+        const id = user.dataValues.id;
         return res.status(201).json({
           message: "User created successfully",
           token: generateAccessToken(user.id),
@@ -51,7 +55,13 @@ exports.postUserLogin = async (req, res, next) => {
           return res.status(500).json({ message: "Password does not match!" });
         }
         if (result) {
-          return res.status(200).json({ message: "Successfully logged in", token: generateAccessToken(user.id), isPremium: user.isPremium });
+          return res
+            .status(200)
+            .json({
+              message: "Successfully logged in",
+              token: generateAccessToken(user.id),
+              isPremium: user.isPremium,
+            });
         } else {
           return res.status(404).json({ message: "User does not exist!" });
         }
