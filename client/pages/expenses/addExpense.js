@@ -5,10 +5,11 @@ const inputAmount = document.getElementById("input-amount");
 const inputDescription = document.getElementById("input-description");
 const inputCategory = document.getElementById("input-category");
 const leaderboardBtn = document.getElementById("leaderboard-btn");
+const reportBtn = document.getElementById('report-btn');
 
 const token = localStorage.getItem("token");
 const isPremium = localStorage.getItem("isPremium");
-if (isPremium) {
+if (isPremium === true) {
   premiumBtn.style.display = "none";
   premiumBadge.style.display = "";
 }
@@ -83,7 +84,6 @@ leaderboardBtn.addEventListener("click", (e) => {
     .get("http://localhost:3000/premium/leaderboard")
     .then((response) => {
       const leaders = response.data;
-      console.log(leaders);
       leaders.forEach(item => {
         addToLeaderTable(item);
       })
@@ -91,6 +91,10 @@ leaderboardBtn.addEventListener("click", (e) => {
     })
     .catch((err) => console.log(err));
 });
+
+reportBtn.addEventListener('click', (e) => {
+  location.assign('/client/pages/expense-report/report-premium.html')
+})
 
 // functions
 function addToList(item) {
@@ -119,7 +123,6 @@ function addToList(item) {
 }
 
 function deleteExpense(id) {
-  console.log(id);
   axios
     .delete(`http://localhost:3000/expense/delete-expense/${id}`, {
       headers: { Authorization: token },

@@ -58,7 +58,6 @@ exports.getResetPassword = async (req, res) => {
 
 exports.postUpdatePassword = async (req, res) => {
   const { password, uuid } = req.body;
-  console.log(req.body.password);
   try {
     const resetRequest = await ForgotPassword.findOne({
       where: { uuid: uuid },

@@ -11,10 +11,10 @@ const purchaseRoutes = require('./server/routes/purchase');
 const premiumRoutes = require('./server/routes/premium');
 const passwordRoutes = require('./server/routes/password');
 
+//models
 const sequelize = require("./server/util/database");
 const User = require("./server/models/user");
 const Expense = require("./server/models/expense");
-
 const authenticateUser = require("./server/middlewares/authenticate");
 const Order = require("./server/models/order");
 const ForgotPassword = require("./server/models/forgotPassword");
