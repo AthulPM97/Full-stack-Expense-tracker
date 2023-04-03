@@ -14,6 +14,21 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => console.log(err));
 });
 
+const downloadBtn = document.getElementById("download-btn");
+downloadBtn.addEventListener("click", (e) => {
+  axios
+    .get("http://localhost:3000/user/download", {
+      headers: { Authorization: token },
+    })
+    .then((response) => {
+      console.log(response)
+      const a = document.createElement('a');
+      a.href = response.data.fileUrl;
+      a.click();
+    })
+    .catch((err) => console.log(err));
+});
+
 // functions
 function addToList(item) {
   const tableBody = document.getElementById("table-body");
@@ -21,7 +36,7 @@ function addToList(item) {
 
   const th = document.createElement("th");
   const date = new Date(item.createdAt);
-  const formattedDate = date.toLocaleDateString('en-GB');
+  const formattedDate = date.toLocaleDateString("en-GB");
   th.innerText = formattedDate;
   const description = document.createElement("td");
   description.innerText = item.description;

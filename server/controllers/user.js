@@ -2,9 +2,39 @@ const User = require("../models/user");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const AWS = require("aws-sdk");
 
 function generateAccessToken(id) {
   return jwt.sign({ id: id }, process.env.SECRET_KEY);
+}
+
+function uploadToS3 (data, filename) {
+  let s3bucket = new AWS.S3({
+    accessKeyId: process.env.IAM_USER_KEY,
+    secretAccessKey: process.env.IAM_USER_SECRET,
+  });
+
+  s3bucket.createBucket(async () => {
+    var params = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: filename,
+      Body: data,
+      ACL: "public-read",
+    };
+    p = await new Promise((resolve, reject) => {
+      s3bucket.upload(params, (err, response) => {
+        if (err) {
+          console.log("something went wrong", err);
+          reject(err);
+        } else {
+          console.log("success", response);
+          resolve(response.Location);
+        }
+      });
+    });
+    return p
+  });
+  return p;
 }
 
 exports.postUserSignup = async (req, res, next) => {
@@ -54,13 +84,11 @@ exports.postUserLogin = async (req, res, next) => {
           return res.status(500).json({ message: "Password does not match!" });
         }
         if (result) {
-          return res
-            .status(200)
-            .json({
-              message: "Successfully logged in",
-              token: generateAccessToken(user.id),
-              isPremium: user.isPremium,
-            });
+          return res.status(200).json({
+            message: "Successfully logged in",
+            token: generateAccessToken(user.id),
+            isPremium: user.isPremium,
+          });
         } else {
           return res.status(404).json({ message: "User does not exist!" });
         }
@@ -68,5 +96,18 @@ exports.postUserLogin = async (req, res, next) => {
     }
   } catch (err) {
     console.log("postUserLogin ", err);
+  }
+};
+
+exports.getDownloadExpenses = async (req, res) => {
+  try {
+    const expenses = await req.user.getExpenses();
+    const stringifiedExpenses = JSON.stringify(expenses);
+    const filename = `${new Date()}.txt`;
+    const fileUrl = await uploadToS3(stringifiedExpenses, filename);
+    console.log(fileUrl);
+    res.status(200).json({ fileUrl, success: true });
+  } catch (err) {
+    console.log(err);
   }
 };
