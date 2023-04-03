@@ -5,13 +5,24 @@ const inputAmount = document.getElementById("input-amount");
 const inputDescription = document.getElementById("input-description");
 const inputCategory = document.getElementById("input-category");
 const leaderboardBtn = document.getElementById("leaderboard-btn");
-const reportBtn = document.getElementById('report-btn');
+const reportBtn = document.getElementById("report-btn");
 
 const token = localStorage.getItem("token");
-const isPremium = localStorage.getItem("isPremium");
-if (isPremium === true) {
+const isPremium = JSON.parse(localStorage.getItem("isPremium"));
+if (isPremium) {
   premiumBtn.style.display = "none";
   premiumBadge.style.display = "";
+  reportBtn.style.display = "";
+  leaderboardBtn.style.display = "";
+} else {
+  const tableBody = document.getElementById("leaderboard-table-body");
+  const tr = document.createElement("tr");
+
+  const message = document.createElement("td");
+  message.innerText = 'Buy premium to unlock feature :)';
+
+  tr.appendChild(message);
+  tableBody.appendChild(tr);
 }
 
 //events
@@ -61,7 +72,8 @@ premiumBtn.addEventListener("click", async (e) => {
           },
           { headers: { Authorization: token } }
         );
-        alert("You are now a premium user");
+        alert("You are now a premium user!");
+        localStorage.setItem("isPremium", "true");
         location.reload();
       },
     };
@@ -84,17 +96,16 @@ leaderboardBtn.addEventListener("click", (e) => {
     .get("http://localhost:3000/premium/leaderboard")
     .then((response) => {
       const leaders = response.data;
-      leaders.forEach(item => {
+      leaders.forEach((item) => {
         addToLeaderTable(item);
-      })
-
+      });
     })
     .catch((err) => console.log(err));
 });
 
-reportBtn.addEventListener('click', (e) => {
-  location.assign('/client/pages/expense-report/report-premium.html')
-})
+reportBtn.addEventListener("click", (e) => {
+  location.assign("/client/pages/expense-report/report-premium.html");
+});
 
 // functions
 function addToList(item) {
@@ -136,7 +147,6 @@ function deleteExpense(id) {
     .catch((err) => console.log(err));
 }
 
-
 function addToLeaderTable(item) {
   const tableBody = document.getElementById("leaderboard-table-body");
   const tr = document.createElement("tr");
@@ -146,7 +156,7 @@ function addToLeaderTable(item) {
   const totalAmount = document.createElement("td");
   totalAmount.innerText = item.totalExpense;
 
-  tr.append(name,totalAmount);
+  tr.append(name, totalAmount);
 
   tableBody.appendChild(tr);
 }
