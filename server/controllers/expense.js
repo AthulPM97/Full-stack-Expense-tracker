@@ -4,9 +4,19 @@ const sequelize = require("../util/database");
 
 exports.getExpenses = async (req, res, next) => {
   const userId = req.user.dataValues.id;
+
+  const pageNumber = req.query.page || 1;
+  console.log(pageNumber)
+  const itemsPerPage = 2;
   try {
-    const result = await Expense.findAll({ where: { userId: userId } });
-    return res.status(200).json(result);
+    const count = await Expense.count({ where: { userId: userId } });
+    console.log(count);
+    const result = await Expense.findAll({
+      where: { userId: userId },
+      offset: (pageNumber - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    });
+    return res.status(200).json({ data: result, totalItems: count });
   } catch (err) {
     console.log(err);
   }

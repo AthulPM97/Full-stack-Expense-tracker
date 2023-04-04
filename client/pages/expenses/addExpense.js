@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
   axios
     .get("http://localhost:3000/expense", { headers: { Authorization: token } })
     .then((result) => {
-      const data = result.data;
+      const totalItems = result.data.totalItems;
+      const data = result.data.data;
+      console.log(data)
       data.forEach((item, i) => addToList(item, i));
     })
     .catch((err) => console.log(err));
