@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import TableBody from "./TableBody";
 import axios from "axios";
 import ButtonCarousel from "./ButtonCarousel";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions } from "../../store/expense-slice";
 
 const { Table } = require("react-bootstrap");
 
@@ -10,12 +12,19 @@ const ExpenseTable = (props) => {
   const [totalPages, setTotalPages] = useState(0);
   const token = localStorage.getItem("token");
 
+  const dispatch = useDispatch();
+
+  const expenses = useSelector(x => x.expense.expenses)
+  const totalItems = useSelector(x => x.expense.totalItems);
+  console.log(expenses);
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/expense", {
         headers: { Authorization: token },
       })
       .then((result) => {
+        dispatch(expenseActions.fetchExpenses(result.data));
         setItems(result.data.data);
         setTotalPages(result.data.totalItems);
       })
@@ -29,7 +38,7 @@ const ExpenseTable = (props) => {
       })
       .then((result) => {
         setItems(result.data.data);
-        // setTotalPages(result.data.totalItems);
+
       })
       .catch((err) => console.log(err));
   }
@@ -46,7 +55,7 @@ const ExpenseTable = (props) => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
+          {expenses.map((item) => (
             <TableBody item={item} key={item.id} />
           ))}
         </tbody>

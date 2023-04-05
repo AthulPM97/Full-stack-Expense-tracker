@@ -1,6 +1,5 @@
 //selectors
 const form = document.getElementById("sign-up-form");
-console.log(form)
 const InputEmail = document.getElementById("input-email");
 const InputPassword = document.getElementById("input-password");
 
