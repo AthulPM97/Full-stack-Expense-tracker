@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TableBody from "./TableBody";
 import axios from "axios";
 import ButtonCarousel from "./ButtonCarousel";
@@ -7,15 +7,16 @@ import { expenseActions } from "../../store/expense-slice";
 
 const { Table } = require("react-bootstrap");
 
-const ExpenseTable = (props) => {
+const ExpenseTable = () => {
   const dispatch = useDispatch();
 
   const token = useSelector((x) => x.auth.token);
   const expenses = useSelector((x) => x.expense.expenses);
 
   useEffect(() => {
+    const limit = JSON.parse(localStorage.getItem('itemLimit'));
     axios
-      .get("http://localhost:3000/expense/?limit=5", {
+      .get(`http://localhost:3000/expense/?limit=${limit}`, {
         headers: { Authorization: token },
       })
       .then((result) => {

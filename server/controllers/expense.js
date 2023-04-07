@@ -6,7 +6,7 @@ exports.getExpenses = async (req, res, next) => {
   const userId = req.user.dataValues.id;
 
   const pageNumber = Number(req.query.page) || 1;
-  const itemLimit = Number(req.query.limit) || 5;
+  const itemLimit = Number(req.query.limit);
   
   try {
     const count = await Expense.count({ where: { userId: userId } });
