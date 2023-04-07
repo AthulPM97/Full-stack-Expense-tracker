@@ -5,15 +5,16 @@ const sequelize = require("../util/database");
 exports.getExpenses = async (req, res, next) => {
   const userId = req.user.dataValues.id;
 
-  const pageNumber = req.query.page || 1;
-  const itemsPerPage = 10;
+  const pageNumber = Number(req.query.page) || 1;
+  const itemLimit = Number(req.query.limit) || 5;
+  
   try {
     const count = await Expense.count({ where: { userId: userId } });
-    console.log(count);
     const result = await Expense.findAll({
       where: { userId: userId },
-      offset: (pageNumber - 1) * itemsPerPage,
-      limit: itemsPerPage,
+      offset: (pageNumber - 1) * itemLimit,
+      limit: itemLimit,
+      order: [['createdAt', 'DESC']]
     });
     return res.status(200).json({ data: result, totalItems: count });
   } catch (err) {

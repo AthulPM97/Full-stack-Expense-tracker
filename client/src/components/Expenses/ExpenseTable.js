@@ -8,40 +8,35 @@ import { expenseActions } from "../../store/expense-slice";
 const { Table } = require("react-bootstrap");
 
 const ExpenseTable = (props) => {
-  const [items, setItems] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const token = localStorage.getItem("token");
-
   const dispatch = useDispatch();
 
-  const expenses = useSelector(x => x.expense.expenses)
-  const totalItems = useSelector(x => x.expense.totalItems);
-  console.log(expenses);
+  const token = useSelector((x) => x.auth.token);
+  const expenses = useSelector((x) => x.expense.expenses);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/expense", {
+      .get("http://localhost:3000/expense/?limit=5", {
         headers: { Authorization: token },
       })
       .then((result) => {
         dispatch(expenseActions.fetchExpenses(result.data));
-        setItems(result.data.data);
-        setTotalPages(result.data.totalItems);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  const pageChangeHandler = (pageNumber) => {
+  const pageChangeHandler = (pageNumber, itemsPerPage) => {
     axios
-      .get(`http://localhost:3000/expense/?page=${pageNumber}`, {
-        headers: { Authorization: token },
-      })
+      .get(
+        `http://localhost:3000/expense/?page=${pageNumber}&limit=${itemsPerPage}`,
+        {
+          headers: { Authorization: token },
+        }
+      )
       .then((result) => {
-        setItems(result.data.data);
-
+        dispatch(expenseActions.setExpenses(result.data.data));
       })
       .catch((err) => console.log(err));
-  }
+  };
   return (
     <React.Fragment>
       <Table hover bordered>
@@ -60,7 +55,7 @@ const ExpenseTable = (props) => {
           ))}
         </tbody>
       </Table>
-      <ButtonCarousel total={totalPages} onPageChange={pageChangeHandler}/>
+      <ButtonCarousel onPageChange={pageChangeHandler} />
     </React.Fragment>
   );
 };

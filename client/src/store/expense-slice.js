@@ -11,6 +11,9 @@ const expenseSlice = createSlice({
         state.expenses = action.payload.data;
         state.totalItems = action.payload.totalItems;
     },
+    setExpenses(state, action) {
+      state.expenses = [...action.payload];
+    },
     addExpense(state, action) {
       state.expenses = [...state.expenses, action.payload];
     },
