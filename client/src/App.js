@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 
@@ -9,15 +9,24 @@ import "bootstrap/dist/css/bootstrap.css";
 import NavigationBar from "./components/UI/NavigationBar";
 import Expenses from "./pages/Expenses";
 import Auth from "./pages/Auth";
+import { Container } from "react-bootstrap";
 
 function App() {
   const navigate = useNavigate();
 
+  const [bg, setBg] = useState('bg-warning');
+
   const isLoggedIn = useSelector((x) => x.auth.isLoggedIn);
   const user = useSelector((x) => x.auth);
   console.log(user);
+
+  useEffect(() => {
+    setInterval(() => {
+      bg === 'bg-warning'? setBg(() =>'bg-danger') : setBg(() =>'bg-warning'); 
+    },1000)
+  },[])
   return (
-    <React.Fragment>
+    <Container>
       <NavigationBar />
 
       <Routes>
@@ -27,7 +36,7 @@ function App() {
         {!isLoggedIn && <Route path="/" element={<Navigate to="/login" />} />}
         {isLoggedIn && <Route path="/" element={<Navigate to="/expenses" />} />}
       </Routes>
-    </React.Fragment>
+    </Container>
   );
 }
 

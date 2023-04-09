@@ -7,14 +7,14 @@ exports.getExpenses = async (req, res, next) => {
 
   const pageNumber = Number(req.query.page) || 1;
   const itemLimit = Number(req.query.limit);
-  
+
   try {
     const count = await Expense.count({ where: { userId: userId } });
     const result = await Expense.findAll({
       where: { userId: userId },
       offset: (pageNumber - 1) * itemLimit,
       limit: itemLimit,
-      order: [['createdAt', 'DESC']]
+      order: [["createdAt", "DESC"]],
     });
     return res.status(200).json({ data: result, totalItems: count });
   } catch (err) {

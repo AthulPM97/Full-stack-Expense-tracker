@@ -20,6 +20,10 @@ const authSlice = createSlice({
       state.isPremium = action.payload.isPremium;
       state.isLoggedIn = true;
     },
+    upgradePremium(state, action) {
+      state.isPremium = true;
+      localStorage.setItem('isPremium', JSON.stringify(true));
+    }
   },
 });
 
