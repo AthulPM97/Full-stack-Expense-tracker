@@ -9,7 +9,7 @@ const TableBody = (props) => {
 
   const deleteItemHandler = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/expense/delete-expense/${id}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/expense/delete-expense/${id}`, {
         headers: { Authorization: token },
       });
       console.log('deleted successfully')

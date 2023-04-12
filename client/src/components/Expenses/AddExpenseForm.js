@@ -22,7 +22,7 @@ const AddExpenseForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/expense/add-expense",
+        `${process.env.REACT_APP_API_URL}/expense/add-expense`,
         expenseData,
         {
           headers: { Authorization: token },

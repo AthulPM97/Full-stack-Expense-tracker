@@ -24,7 +24,7 @@ const SignupForm = () => {
     };
 
     axios
-      .post("http://localhost:3000/user/sign-up", inputData)
+      .post(`${process.env.REACT_APP_API_URL}/user/sign-up`, inputData)
       .then((res) => {
         // localStorage.setItem("token", res.data.token);
         console.log(res.data);

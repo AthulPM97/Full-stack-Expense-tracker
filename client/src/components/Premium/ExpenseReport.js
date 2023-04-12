@@ -12,23 +12,21 @@ const ExpenseReport = () => {
   useEffect(() => {
     let total;
     axios
-      .get("http://localhost:3000/expense", {
+      .get(`${process.env.REACT_APP_API_URL}/expense`, {
         headers: { Authorization: token },
       })
       .then((result) => {
         const data = result.data.data;
         setExpenses(data);
-        //   data.forEach((item) => addToList(item));
         total = data.reduce((total, item) => total + item.amount, 0);
         setTotal(total);
-        //   makeFooter(total);
       })
       .catch((err) => console.log(err));
   }, []);
 
   const downloadReportHandler = () => {
     axios
-      .get("http://localhost:3000/user/download", {
+      .get(`${process.env.REACT_APP_API_URL}/user/download`, {
         headers: { Authorization: token },
       })
       .then((response) => {

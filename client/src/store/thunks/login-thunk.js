@@ -17,7 +17,7 @@ export const login = (credentials) => {
             isPremium: res.data.isPremium,
           })
         );
-        history.navigate('/expenses');
+        history.navigate("/expenses");
       }
     };
 

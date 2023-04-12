@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const buyPremiumHandler = async (e) => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/purchase/buy-premium",
+        `${process.env.REACT_APP_API_URL}/purchase/buy-premium`,
         { headers: { Authorization: token } }
       );
       console.log(response);
@@ -24,7 +24,7 @@ const NavigationBar = () => {
         order_id: response.data.order.id,
         handler: async function (response) {
           await axios.post(
-            "http://localhost:3000/purchase/update-transaction-status",
+            `${process.env.REACT_APP_API_URL}/purchase/update-transaction-status`,
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
@@ -37,7 +37,6 @@ const NavigationBar = () => {
       };
       const rzp = new window.Razorpay(options);
       rzp.open();
-      // e.preventDefault;
       rzp.on("payment.failed", function (response) {
         console.log(response);
         alert("Something went wrong");
@@ -49,7 +48,7 @@ const NavigationBar = () => {
 
   const leaderboardHandler = () => {
     axios
-      .get("http://localhost:3000/premium/leaderboard", {
+      .get(`${process.env.REACT_APP_API_URL}/premium/leaderboard`, {
         headers: { Authorization: token },
       })
       .then((response) => {
@@ -61,13 +60,13 @@ const NavigationBar = () => {
   };
 
   const expenseReportHandler = () => {
-    navigate('/expense-report');
+    navigate("/expense-report");
   };
 
   const logoutHandler = () => {
-    navigate('/login');
+    navigate("/login");
     dispatch(authActions.logout());
-  }
+  };
 
   return (
     <Navbar bg="light" variant="light">
@@ -78,7 +77,11 @@ const NavigationBar = () => {
             Leaderboard
           </Button>
         )}
-        {isPremium && <Button variant="outline-primary" onClick={expenseReportHandler}>Expense report</Button>}
+        {isPremium && (
+          <Button variant="outline-primary" onClick={expenseReportHandler}>
+            Expense report
+          </Button>
+        )}
         {!isPremium && (
           <Button variant="outline-primary" onClick={buyPremiumHandler}>
             Buy Premium
@@ -86,7 +89,9 @@ const NavigationBar = () => {
         )}
         {isPremium && <Badge>Premium user</Badge>}
       </Container>
-      <Button variant="outline-danger" onClick={logoutHandler}>Logout</Button>
+      <Button variant="outline-danger" onClick={logoutHandler}>
+        Logout
+      </Button>
     </Navbar>
   );
 };

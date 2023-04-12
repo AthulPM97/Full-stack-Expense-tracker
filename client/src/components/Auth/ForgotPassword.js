@@ -18,7 +18,7 @@ const ForgotPassword = () => {
       email: emailRef.current.value,
     };
     axios
-      .post("http://localhost:3000/password/forgot-password", payload)
+      .post(`${process.env.REACT_APP_API_URL}/password/forgot-password`, payload)
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
   };

@@ -16,7 +16,7 @@ const ExpenseTable = () => {
   useEffect(() => {
     const limit = JSON.parse(localStorage.getItem('itemLimit')) || 5;
     axios
-      .get(`http://localhost:3000/expense/?limit=${limit}`, {
+      .get(`${process.env.REACT_APP_API_URL}/expense/?limit=${limit}`, {
         headers: { Authorization: token },
       })
       .then((result) => {
@@ -28,7 +28,7 @@ const ExpenseTable = () => {
   const pageChangeHandler = (pageNumber, itemsPerPage) => {
     axios
       .get(
-        `http://localhost:3000/expense/?page=${pageNumber}&limit=${itemsPerPage}`,
+        `${process.env.REACT_APP_API_URL}/expense/?page=${pageNumber}&limit=${itemsPerPage}`,
         {
           headers: { Authorization: token },
         }
