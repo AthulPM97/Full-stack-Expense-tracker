@@ -1,15 +1,20 @@
+const fs = require("fs");
+const path = require("path");
+
 require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
 //routes
 const userRoutes = require("./server/routes/user");
-const expenseRoutes = require('./server/routes/expense');
-const purchaseRoutes = require('./server/routes/purchase');
-const premiumRoutes = require('./server/routes/premium');
-const passwordRoutes = require('./server/routes/password');
+const expenseRoutes = require("./server/routes/expense");
+const purchaseRoutes = require("./server/routes/purchase");
+const premiumRoutes = require("./server/routes/premium");
+const passwordRoutes = require("./server/routes/password");
 
 //models
 const sequelize = require("./server/util/database");
@@ -21,20 +26,27 @@ const ForgotPassword = require("./server/models/forgotPassword");
 
 const app = express();
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
 //middleware stack
 app.use(cors());
+app.use(helmet());
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(bodyParser.json());
 
 app.use("/user", userRoutes);
 
-app.use('/expense', authenticateUser, expenseRoutes);
+app.use("/expense", authenticateUser, expenseRoutes);
 
-app.use('/purchase', authenticateUser, purchaseRoutes);
+app.use("/purchase", authenticateUser, purchaseRoutes);
 
-app.use('/premium',  premiumRoutes);
+app.use("/premium", premiumRoutes);
 
-app.use('/password', passwordRoutes);
+app.use("/password", passwordRoutes);
 
 //user-expense association
 User.hasMany(Expense);
