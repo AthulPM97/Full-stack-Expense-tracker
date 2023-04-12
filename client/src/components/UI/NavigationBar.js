@@ -2,15 +2,15 @@ import axios from "axios";
 import { Navbar, Container, Button, Badge } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../store/auth-slice";
-import { useState } from "react";
 import { premiumActions } from "../../store/premium-slice";
+import { useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+
   const token = useSelector((x) => x.auth.token);
   const isPremium = useSelector((x) => x.auth.isPremium);
   const dispatch = useDispatch();
-
-  const [leaders, setLeaders] = useState([]);
 
   const buyPremiumHandler = async (e) => {
     try {
@@ -54,11 +54,15 @@ const NavigationBar = () => {
       })
       .then((response) => {
         const leaders = response.data;
-        console.log(leaders);
         dispatch(premiumActions.setLeaders(leaders));
+        navigate("/leaderboard");
       })
       .catch((err) => console.log(err));
   };
+
+  const expenseReportHandler = () => {
+    navigate('/expense-report');
+  }
 
   return (
     <Navbar bg="light" variant="light">
@@ -69,7 +73,7 @@ const NavigationBar = () => {
             Leaderboard
           </Button>
         )}
-        {isPremium && <Button variant="outline-primary">Expense report</Button>}
+        {isPremium && <Button variant="outline-primary" onClick={expenseReportHandler}>Expense report</Button>}
         {!isPremium && (
           <Button variant="outline-primary" onClick={buyPremiumHandler}>
             Buy Premium

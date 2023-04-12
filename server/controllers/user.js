@@ -8,34 +8,29 @@ function generateAccessToken(id) {
   return jwt.sign({ id: id }, process.env.SECRET_KEY);
 }
 
-function uploadToS3 (data, filename) {
+async function uploadToS3 (data, filename) {
   let s3bucket = new AWS.S3({
     accessKeyId: process.env.IAM_USER_KEY,
     secretAccessKey: process.env.IAM_USER_SECRET,
   });
 
-  s3bucket.createBucket(async () => {
-    var params = {
-      Bucket: process.env.BUCKET_NAME,
-      Key: filename,
-      Body: data,
-      ACL: "public-read",
-    };
-    p = await new Promise((resolve, reject) => {
-      s3bucket.upload(params, (err, response) => {
-        if (err) {
-          console.log("something went wrong", err);
-          reject(err);
-        } else {
-          console.log("success", response);
-          resolve(response.Location);
-        }
-      });
-    });
-    return p
-  });
-  return p;
+  var params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key: filename,
+    Body: data,
+    ACL: "public-read",
+  };
+
+  try {
+    const response = await s3bucket.upload(params).promise();
+    console.log("success", response);
+    return response.Location;
+  } catch (err) {
+    console.log("something went wrong", err);
+    throw err;
+  }
 }
+
 
 exports.postUserSignup = async (req, res, next) => {
   const userDetails = req.body;

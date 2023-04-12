@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   axios
     .get("http://localhost:3000/expense", { headers: { Authorization: token } })
     .then((result) => {
-      const data = result.data;
+      const data = result.data.data;
       console.log(data);
       data.forEach((item) => addToList(item));
       total = data.reduce((total, item) => total + item.amount, 0);

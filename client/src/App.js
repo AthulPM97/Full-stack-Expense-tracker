@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // react bootstrap configuration
 import "../node_modules/react-bootstrap/dist/react-bootstrap.min";
@@ -11,12 +11,11 @@ import Expenses from "./pages/Expenses";
 import Auth from "./pages/Auth";
 import { Container } from "react-bootstrap";
 import Leaderboard from "./components/Premium/Leaderboard";
+import ExpenseReport from "./components/Premium/ExpenseReport";
 
 function App() {
-  const navigate = useNavigate();
-
   const isLoggedIn = useSelector((x) => x.auth.isLoggedIn);
-  const user = useSelector((x) => x.auth);
+  const isPremium = useSelector((x) => x.auth.isPremium);
 
   return (
     <Container>
@@ -28,7 +27,10 @@ function App() {
         <Route path="/expenses" element={<Expenses />} />
         {!isLoggedIn && <Route path="/" element={<Navigate to="/login" />} />}
         {isLoggedIn && <Route path="/" element={<Navigate to="/expenses" />} />}
-        <Route path='/leaderboard' element={<Leaderboard/>} />
+        {isPremium && <Route path="/leaderboard" element={<Leaderboard />} />}
+        {isPremium && (
+          <Route path="/expense-report" element={<ExpenseReport />} />
+        )}
       </Routes>
     </Container>
   );
