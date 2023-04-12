@@ -10,21 +10,14 @@ import NavigationBar from "./components/UI/NavigationBar";
 import Expenses from "./pages/Expenses";
 import Auth from "./pages/Auth";
 import { Container } from "react-bootstrap";
+import Leaderboard from "./components/Premium/Leaderboard";
 
 function App() {
   const navigate = useNavigate();
 
-  const [bg, setBg] = useState('bg-warning');
-
   const isLoggedIn = useSelector((x) => x.auth.isLoggedIn);
   const user = useSelector((x) => x.auth);
-  console.log(user);
 
-  useEffect(() => {
-    setInterval(() => {
-      bg === 'bg-warning'? setBg(() =>'bg-danger') : setBg(() =>'bg-warning'); 
-    },1000)
-  },[])
   return (
     <Container>
       <NavigationBar />
@@ -35,6 +28,7 @@ function App() {
         <Route path="/expenses" element={<Expenses />} />
         {!isLoggedIn && <Route path="/" element={<Navigate to="/login" />} />}
         {isLoggedIn && <Route path="/" element={<Navigate to="/expenses" />} />}
+        <Route path='/leaderboard' element={<Leaderboard/>} />
       </Routes>
     </Container>
   );

@@ -1,10 +1,16 @@
 import axios from "axios";
-// import { Razorpay } from "razorpay";
-import { Navbar, Container, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { Navbar, Container, Button, Badge } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/auth-slice";
+import { useState } from "react";
+import { premiumActions } from "../../store/premium-slice";
 
 const NavigationBar = () => {
   const token = useSelector((x) => x.auth.token);
+  const isPremium = useSelector((x) => x.auth.isPremium);
+  const dispatch = useDispatch();
+
+  const [leaders, setLeaders] = useState([]);
 
   const buyPremiumHandler = async (e) => {
     try {
@@ -26,7 +32,7 @@ const NavigationBar = () => {
             { headers: { Authorization: token } }
           );
           alert("You are now a premium user!");
-          localStorage.setItem("isPremium", "true");
+          dispatch(authActions.upgradePremium());
         },
       };
       const rzp = new window.Razorpay(options);
@@ -41,14 +47,35 @@ const NavigationBar = () => {
     }
   };
 
+  const leaderboardHandler = () => {
+    axios
+      .get("http://localhost:3000/premium/leaderboard", {
+        headers: { Authorization: token },
+      })
+      .then((response) => {
+        const leaders = response.data;
+        console.log(leaders);
+        dispatch(premiumActions.setLeaders(leaders));
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Navbar bg="light" variant="light">
       <Container>
         <Navbar.Brand href="/expenses">Expenses</Navbar.Brand>
-        <Button>Leaderboard</Button>
-        <Button variant="outline-primary" onClick={buyPremiumHandler}>
-          Buy Premium
-        </Button>
+        {isPremium && (
+          <Button variant="outline-primary" onClick={leaderboardHandler}>
+            Leaderboard
+          </Button>
+        )}
+        {isPremium && <Button variant="outline-primary">Expense report</Button>}
+        {!isPremium && (
+          <Button variant="outline-primary" onClick={buyPremiumHandler}>
+            Buy Premium
+          </Button>
+        )}
+        {isPremium && <Badge>Premium user</Badge>}
       </Container>
     </Navbar>
   );
