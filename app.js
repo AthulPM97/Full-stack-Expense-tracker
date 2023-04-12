@@ -32,7 +32,7 @@ app.use('/expense', authenticateUser, expenseRoutes);
 
 app.use('/purchase', authenticateUser, purchaseRoutes);
 
-app.use('/premium', authenticateUser, premiumRoutes);
+app.use('/premium',  premiumRoutes);
 
 app.use('/password', passwordRoutes);
 

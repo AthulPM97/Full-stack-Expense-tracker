@@ -20,9 +20,16 @@ const authSlice = createSlice({
       state.isPremium = action.payload.isPremium;
       state.isLoggedIn = true;
     },
+    signup(state,action) {
+      localStorage.setItem('token', action.payload.token);
+    },
     upgradePremium(state, action) {
       state.isPremium = true;
       localStorage.setItem('isPremium', JSON.stringify(true));
+    },
+    logout(state,action) {
+      localStorage.clear();
+      state.isLoggedIn = false;
     }
   },
 });

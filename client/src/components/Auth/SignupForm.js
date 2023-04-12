@@ -2,46 +2,53 @@ import { useRef } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../store/thunks/login-thunk";
-import { validate } from "./validate";
+import { authActions } from "../../store/auth-slice";
+import axios from "axios";
 
-const LoginForm = () => {
-  //history
+const SignupForm = () => {
   const navigate = useNavigate();
 
-  //store
   const dispatch = useDispatch();
 
-  //refs
+  const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  //handlers
-  const loginHandler = (event) => {
-    event.preventDefault();
-    const enteredEmail = emailRef.current.value;
-    const enteredPassword = passwordRef.current.value;
+  const SignupHandler = (e) => {
+    e.preventDefault();
 
-    //validation
-    const credentials = {
-      email: enteredEmail,
-      password: enteredPassword,
+    const inputData = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
     };
-    if (validate(credentials)) {
-      dispatch(login(credentials));
-    }
+
+    axios
+      .post("http://localhost:3000/user/sign-up", inputData)
+      .then((res) => {
+        // localStorage.setItem("token", res.data.token);
+        console.log(res.data);
+        if (res.status === 201) {
+          navigate("/expenses");
+          dispatch(authActions.signup(res.data));
+        }
+      })
+      .catch((err) => console.log(err.response.data.message));
   };
 
   const authModeHandler = () => {
-    navigate('/signup');
+    navigate("/login");
   };
 
   return (
     <Container>
       <div className="text-center mb-3">
-        <h3>Login</h3>
+        <h3>Sign up</h3>
       </div>
-      <Form onSubmit={loginHandler}>
+      <Form onSubmit={SignupHandler}>
+        <Form.Group className="mb-2">
+          <Form.Control type="text" placeholder="Name" ref={nameRef} required />
+        </Form.Group>
         <Form.Group className="mb-2">
           <Form.Control
             type="email"
@@ -60,18 +67,18 @@ const LoginForm = () => {
         </Form.Group>
         <div className="text-center">
           <Button variant="primary" type="submit">
-            Login
+            Sign up
           </Button>
         </div>
       </Form>
       <br />
       <div style={{ textAlign: "center" }}>
         <Button variant="outline-warning" onClick={authModeHandler}>
-          Don't have an account? Sign up
+          Already have an account? Login
         </Button>
       </div>
     </Container>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

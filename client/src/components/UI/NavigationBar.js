@@ -62,6 +62,11 @@ const NavigationBar = () => {
 
   const expenseReportHandler = () => {
     navigate('/expense-report');
+  };
+
+  const logoutHandler = () => {
+    navigate('/login');
+    dispatch(authActions.logout());
   }
 
   return (
@@ -81,6 +86,7 @@ const NavigationBar = () => {
         )}
         {isPremium && <Badge>Premium user</Badge>}
       </Container>
+      <Button variant="outline-danger" onClick={logoutHandler}>Logout</Button>
     </Navbar>
   );
 };

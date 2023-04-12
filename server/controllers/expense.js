@@ -7,7 +7,6 @@ exports.getExpenses = async (req, res, next) => {
 
   const pageNumber = Number(req.query.page) || 1;
   const itemLimit = Number(req.query.limit) || 10;
-  console.log(itemLimit)
 
   try {
     const count = await Expense.count({ where: { userId: userId } });
@@ -17,6 +16,7 @@ exports.getExpenses = async (req, res, next) => {
       limit: itemLimit,
       order: [["createdAt", "DESC"]],
     });
+    if(result.length === 0) return res.status(404).json({message:'No expenses found!'});
     return res.status(200).json({ data: result, totalItems: count });
   } catch (err) {
     console.log(err);

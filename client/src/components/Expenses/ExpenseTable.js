@@ -14,7 +14,7 @@ const ExpenseTable = () => {
   const expenses = useSelector((x) => x.expense.expenses);
 
   useEffect(() => {
-    const limit = JSON.parse(localStorage.getItem('itemLimit'));
+    const limit = JSON.parse(localStorage.getItem('itemLimit')) || 5;
     axios
       .get(`http://localhost:3000/expense/?limit=${limit}`, {
         headers: { Authorization: token },
