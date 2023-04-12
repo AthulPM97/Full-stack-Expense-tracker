@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Razorpay } from "razorpay";
+// import { Razorpay } from "razorpay";
 import { Navbar, Container, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -13,29 +13,29 @@ const NavigationBar = () => {
         { headers: { Authorization: token } }
       );
       console.log(response);
-      // var options = {
-      //   key: response.data.key_id,
-      //   order_id: response.data.order.id,
-      //   handler: async function (response) {
-      //     await axios.post(
-      //       "http://localhost:3000/purchase/update-transaction-status",
-      //       {
-      //         order_id: options.order_id,
-      //         payment_id: response.razorpay_payment_id,
-      //       },
-      //       { headers: { Authorization: token } }
-      //     );
-      //     alert("You are now a premium user!");
-      //     localStorage.setItem("isPremium", "true");
-      //   },
-      // };
-      // const rzp = new Razorpay(options);
-      // rzp.open();
-      // // e.preventDefault;
-      // rzp.on("payment.failed", function (response) {
-      //   console.log(response);
-      //   alert("Something went wrong");
-      // });
+      var options = {
+        key: response.data.key_id,
+        order_id: response.data.order.id,
+        handler: async function (response) {
+          await axios.post(
+            "http://localhost:3000/purchase/update-transaction-status",
+            {
+              order_id: options.order_id,
+              payment_id: response.razorpay_payment_id,
+            },
+            { headers: { Authorization: token } }
+          );
+          alert("You are now a premium user!");
+          localStorage.setItem("isPremium", "true");
+        },
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+      // e.preventDefault;
+      rzp.on("payment.failed", function (response) {
+        console.log(response);
+        alert("Something went wrong");
+      });
     } catch (err) {
       console.log(err);
     }
