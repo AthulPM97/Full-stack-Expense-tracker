@@ -14,6 +14,7 @@ import Leaderboard from "./components/Premium/Leaderboard";
 import ExpenseReport from "./components/Premium/ExpenseReport";
 import SignupForm from "./components/Auth/SignupForm";
 import { history } from "./helpers/history";
+import ForgotPassword from "./components/Auth/ForgotPassword";
 
 function App() {
   const isLoggedIn = useSelector((x) => x.auth.isLoggedIn);
@@ -29,7 +30,8 @@ function App() {
       <Routes>
         {!isLoggedIn && <Route path="/login" element={<Auth />} />}
         {!isLoggedIn && <Route path="/signup" element={<SignupForm />} />}
-        <Route path="/expenses" element={<Expenses />} />
+        {!isLoggedIn && <Route path='/forgot-password' element={<ForgotPassword/>}/>}
+        {isLoggedIn && <Route path="/expenses" element={<Expenses />} />}
         {!isLoggedIn && <Route path="/" element={<Navigate to="/login" />} />}
         {isLoggedIn && <Route path="/" element={<Navigate to="/expenses" />} />}
         {isPremium && <Route path="/leaderboard" element={<Leaderboard />} />}

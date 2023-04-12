@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, NavLink } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/thunks/login-thunk";
@@ -36,6 +36,10 @@ const LoginForm = () => {
     navigate('/signup');
   };
 
+  const forgotPasswordHandler = () => {
+    navigate('/forgot-password');
+  }
+
   return (
     <Container>
       <div className="text-center mb-3">
@@ -69,7 +73,10 @@ const LoginForm = () => {
         <Button variant="outline-warning" onClick={authModeHandler}>
           Don't have an account? Sign up
         </Button>
+        <br/>
+        <NavLink onClick={forgotPasswordHandler}>Forgot password?</NavLink>
       </div>
+
     </Container>
   );
 };
